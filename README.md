@@ -2,6 +2,8 @@
 The Data collector for the model that we will train for the facial recognition model. All updates to code will be logged to this .README
 
 
+<br><br/>
+
 **3/14**
 
 Added detection for frontal face and profile face
