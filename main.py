@@ -1,3 +1,5 @@
+#TODO: System needs review, is very buggy and only detects face about 70% of the the time 
+
 import cv2
 import numpy as np
 
