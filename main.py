@@ -1,176 +1,44 @@
+import cv2
 import numpy as np
 
-import cv2 
+# Load the pre-trained Haar Cascade classifiers for frontal and profile faces
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+profile_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
 
-prototxt_path  ="C:/Users/tkris/Documents/Polygence Project/Face-Data-Collecter/MobileNetSSD_deploy.prototxt.txt"
-image_path = 'C:/Users/tkris/Documents/Polygence Project/Face-Data-Collecter/WIN_20230313_16_27_56_Pro.jpg'
-model_path = 'C:/Users/tkris/Documents/Polygence Project/Face-Data-Collecter/MobileNetSSD_deploy.caffemodel'
+# Open a video capture object for the webcam
+cap = cv2.VideoCapture(0)
 
+while True:
+    # Read a frame from the webcam
+    ret, frame = cap.read()
 
-min_confidence = 0.1
+    # Create a black mask with the same size as the frame
+    mask = np.zeros_like(frame)
 
+    # Convert the frame to grayscale
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-classes = ['person']
+    # Detect frontal faces in the grayscale frame
+    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
+    # Copy detected frontal faces from the frame to the mask
+    for (x,y,w,h) in faces:
+        mask[y:y+h,x:x+w] = frame[y:y+h,x:x+w]
 
+    # Detect profile faces in the grayscale frame
+    profiles = profile_cascade.detectMultiScale(gray, 1.3, 5)
 
-np.random.seed(543210)
-colors  = np.random.uniform(0, 255, size=(len(classes), 3))
+    # Copy detected profile faces from the frame to the mask
+    for (x,y,w,h) in profiles:
+        mask[y:y+h,x:x+w] = frame[y:y+h,x:x+w]
 
-net = cv2.dnn.readNet(prototxt_path, model_path)
+    # Display the resulting mask with face detections
+    cv2.imshow('Face Detection',mask)
 
-image = cv2.imread(image_path)
+    # Exit if the 'q' key is pressed
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 
-height, width = image.shape[0], image.shape[1]
-
-blob = cv2.dnn.blobFromImage(cv2.resize(image, (300,300)), 0.007, (300, 300), 130)
-
-net.setInput(blob)
-
-
-detected_objects = net.forward()
-
-
-for i in range(detected_objects.shape[2]):
-
-    confidence = detected_objects[0][0][i][1]
-
-    if confidence > min_confidence:
-
-        class_index = int(detected_objects[0, 0, i, 0])
-
-        upper_left_x = int(detected_objects[0, 0, i, 3] * width)
-        upper_left_y = int(detected_objects[0, 0, i, 4] * height)
-        lower_right_x = int(detected_objects[0, 0, i, 5] * width)
-        lower_right_y = int(detected_objects[0, 0, i, 6] * height)
-
-
-        prediction_text = f"{classes[class_index]}: {confidence:.2f}%"
-
-        cv2.rectangle(image, (upper_left_x, upper_left_y), (lower_right_x, lower_right_y), colors[class_index], 3)
-
-        cv2.putText(image, prediction_text, upper_left_x, upper_left_y-15 if upper_left_y > 30 else upper_left_y + 15, cv2.FONT_HERSHEY_SIMPLEX, 0.6, colors[class_index], 2)
-
-
-
-cv2.imshow("Detected", image)
-
-cv2.waitKey(0)
-
-cv2.destroyAllWindows() 
-
-
-
-import cv2 # Computer vision library
-import numpy as np # Scientific computing library 
- 
-# Make sure the video file is in the same directory as your code
-filename = 'edmonton_canada.mp4'
-file_size = (1920,1080) # Assumes 1920x1080 mp4
- 
-# We want to save the output to a video file
-output_filename = 'edmonton_canada_obj_detect_mobssd.mp4'
-output_frames_per_second = 20.0
- 
-RESIZED_DIMENSIONS = (300, 300) # Dimensions that SSD was trained on. 
-IMG_NORM_RATIO = 0.007843 # In grayscale a pixel can range between 0 and 255
- 
-# Load the pre-trained neural network
-neural_network = cv2.dnn.readNetFromCaffe('MobileNetSSD_deploy.prototxt.txt', 
-        'MobileNetSSD_deploy.caffemodel')
- 
-# List of categories and classes
-categories = { 0: 'background', 1: 'aeroplane', 2: 'bicycle', 3: 'bird', 
-               4: 'boat', 5: 'bottle', 6: 'bus', 7: 'car', 8: 'cat', 
-               9: 'chair', 10: 'cow', 11: 'diningtable', 12: 'dog', 
-              13: 'horse', 14: 'motorbike', 15: 'person', 
-              16: 'pottedplant', 17: 'sheep', 18: 'sofa', 
-              19: 'train', 20: 'tvmonitor'}
- 
-classes =  ["background", "aeroplane", "bicycle", "bird", "boat", "bottle", 
-            "bus", "car", "cat", "chair", "cow", 
-           "diningtable",  "dog", "horse", "motorbike", "person", 
-           "pottedplant", "sheep", "sofa", "train", "tvmonitor"]
-                      
-# Create the bounding boxes
-bbox_colors = np.random.uniform(255, 0, size=(len(categories), 3))
-     
-def main():
- 
-  # Load a video
-  cap = cv2.VideoCapture(filename)
- 
-  # Create a VideoWriter object so we can save the video output
-  fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-  result = cv2.VideoWriter(output_filename,  
-                           fourcc, 
-                           output_frames_per_second, 
-                           file_size) 
-     
-  # Process the video
-  while cap.isOpened():
-         
-    # Capture one frame at a time
-    success, frame = cap.read() 
- 
-    # Do we have a video frame? If true, proceed.
-    if success:
-         
-      # Capture the frame's height and width
-      (h, w) = frame.shape[:2]
- 
-      # Create a blob. A blob is a group of connected pixels in a binary 
-      # frame that share some common property (e.g. grayscale value)
-      # Preprocess the frame to prepare it for deep learning classification
-      frame_blob = cv2.dnn.blobFromImage(cv2.resize(frame, RESIZED_DIMENSIONS), 
-                     IMG_NORM_RATIO, RESIZED_DIMENSIONS, 127.5)
-     
-      # Set the input for the neural network
-      neural_network.setInput(frame_blob)
- 
-      # Predict the objects in the image
-      neural_network_output = neural_network.forward()
- 
-      # Put the bounding boxes around the detected objects
-      for i in np.arange(0, neural_network_output.shape[2]):
-             
-        confidence = neural_network_output[0, 0, i, 2]
-     
-        # Confidence must be at least 30%       
-        if confidence > 0.30:
-                 
-          idx = int(neural_network_output[0, 0, i, 1])
- 
-          bounding_box = neural_network_output[0, 0, i, 3:7] * np.array(
-            [w, h, w, h])
- 
-          (startX, startY, endX, endY) = bounding_box.astype("int")
- 
-          label = "{}: {:.2f}%".format(classes[idx], confidence * 100) 
-         
-          cv2.rectangle(frame, (startX, startY), (
-            endX, endY), bbox_colors[idx], 2)     
-                         
-          y = startY - 15 if startY - 15 > 15 else startY + 15    
- 
-          cv2.putText(frame, label, (startX, y),cv2.FONT_HERSHEY_SIMPLEX, 
-            0.5, bbox_colors[idx], 2)
-         
-      # We now need to resize the frame so its dimensions
-      # are equivalent to the dimensions of the original frame
-      frame = cv2.resize(frame, file_size, interpolation=cv2.INTER_NEAREST)
- 
-            # Write the frame to the output video file
-      result.write(frame)
-         
-    # No more video frames left
-    else:
-      break
-             
-  # Stop when the video is finished
-  cap.release()
-     
-  # Release the video recording
-  result.release()
- 
-main()
+# Release the video capture and destroy all windows
+cap.release()
+cv2.destroyAllWindows()
