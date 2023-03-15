@@ -6,10 +6,22 @@ The Data collector for the model that we will train for the facial recognition m
 
 **3/14**
 
-Added detection for frontal face and profile face
+  - Added detection for frontal face and profile face
 
-Used detection scripts to mask track face and Mask background(As of 3/13/23- Very buggy, needs review)
+  - Used detection scripts to mask track face and Mask background(As of 3/13/23- Very buggy, needs review)
 
-The masked background will help model detect the face with various backgrounds
+  - The masked background will help model detect the face with various backgrounds
+
+<br><br/>
+  - **Note:**
+
+  - Further on in the day I built a new system, all buggy code comments should be ignored
+
+  - New System: 
+
+    - Will take picture of screen if face detected
+
+    - TODO: Picture includes background, we need to find a way to only take a picture of the face, and not the background
+    - TODO: The script only takes one picture, we need it to take multiple pictures
 
 
