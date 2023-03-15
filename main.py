@@ -14,7 +14,7 @@
 import cv2
 import numpy as np
 
-# Load the pre-trained Haar Cascade classifiers for frontal and profile faces
+
 #face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 #profile_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
 
@@ -48,8 +48,9 @@ while True:
         minSize=(30, 30)
     )
 
-    print("[INFO] Found {0} Faces!".format(len(faces)))
-    print("[INFO] Found {0} Faces!".format(len(profile)))
+    
+    print("Found {0} Faces".format(len(faces)))
+    print("Found {0} Faces".format(len(profile)))
 
     for (x, y, w, h) in faces:
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
@@ -60,7 +61,7 @@ while True:
         
 
     status = cv2.imwrite('faces_detected.jpg', frame)
-    print("[INFO] Image faces_detected.jpg written to filesystem: ", status)
+    print("Image faces_detected.jpg written to filesystem: ", status)
 
 
 
