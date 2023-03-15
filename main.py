@@ -3,6 +3,14 @@
 
 
 
+#TODO: Current system take picture of face and background, we need it to take it of just the face
+
+#TODO: Only takes one picture, we need it to take multiple
+
+
+
+
+
 import cv2
 import numpy as np
 
