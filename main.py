@@ -1,80 +1,61 @@
-
 #I changed the system last minute so ignore all warnings about buggy code
 
 
 
-#TODO: Current system take picture of face and background, we need it to take it of just the face
+
 
 #TODO: Only takes one picture, we need it to take multiple
 
 
-
-
-
 import cv2
-import numpy as np
 
-
-#face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-#profile_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
-
-# Open a video capture object for the webcam
+# Load the pre-trained face detection classifier
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+profile_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
+# Capture video from the webcam
 cap = cv2.VideoCapture(0)
 
-
+# Loop through each frame
 while True:
-    # Read a frame from the webcam
+    # Read the frame
     ret, frame = cap.read()
 
-    
-    
-
-    
+    # Convert the frame to grayscale
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-    faces = faceCascade.detectMultiScale(
-        gray,
-        scaleFactor=1.3,
-        minNeighbors=3,
-        minSize=(30, 30)
-    )
+    # Detect faces in the frame
+    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+    profile = profile_cascade.detectMultiScale(gray, 1.3, 5)
 
-    profileCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_profileface_default.xml")
-    profile = faceCascade.detectMultiScale(
-        gray,
-        scaleFactor=1.3,
-        minNeighbors=3,
-        minSize=(30, 30)
-    )
-
-    
-    print("Found {0} Faces".format(len(faces)))
-    print("Found {0} Faces".format(len(profile)))
-
+    # Loop through each face and draw a bounding box
     for (x, y, w, h) in faces:
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-
-    for (x, y, w, h) in profile:
+        # Draw a green rectangle around the face
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
         
+        # Set everything outside of the bounding box to black
+        frame[:, :x] = 0
+        frame[:, x+w:] = 0
+        frame[:y, x:x+w] = 0
+        frame[y+h:, x:x+w] = 0
 
-    status = cv2.imwrite('faces_detected.jpg', frame)
-    print("Image faces_detected.jpg written to filesystem: ", status)
+    for (x, y, w, h) in profile:
+        # Draw a green rectangle around the face
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        
+        # Set everything outside of the bounding box to black
+        frame[:, :x] = 0
+        frame[:, x+w:] = 0
+        frame[:y, x:x+w] = 0
+        frame[y+h:, x:x+w] = 0
 
+    # Display the resulting frame
+    cv2.imshow('frame', frame)
+    cv2.imwrite('faces_detected.jpg', frame)
 
-
-
-    
-
-    # Display the resulting mask with face detections
-    cv2.imshow('Face Detection',frame)
-
-   
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    # Exit the loop if the 'q' key is pressed
+    if cv2.waitKey(1) == ord('q'):
         break
 
-
+# Release the capture and destroy the window
 cap.release()
 cv2.destroyAllWindows()
