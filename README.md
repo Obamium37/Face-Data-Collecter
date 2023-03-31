@@ -25,3 +25,12 @@ The Data collector for the model that we will train for the facial recognition m
     - TODO: The script only takes one picture, we need it to take multiple pictures
 
 
+
+<br><br/>
+
+**3/30**
+  - Changed system to set background to black
+  - Need to find way to multiple pictures of face instead of just taking one, as well as a way to save it(Later)
+  - See if the model will be able to use data with a black background
+
+
