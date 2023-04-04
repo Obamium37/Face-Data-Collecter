@@ -32,5 +32,13 @@ The Data collector for the model that we will train for the facial recognition m
   - Changed system to set background to black
   - TODO: Need to find way to multiple pictures of face instead of just taking one, as well as a way to save it
   - TODO: See if the model will be able to use data with a black background
+  
+ <br><br/>
+ 
+ **4/3**
+ 
+  - Changed the system(Again)
+  - Made it more efficient where it takes an image, and then processes it for face features, crops the image down to just the face and saves it
+  - Still need to find a way to take more than one photo, as well as create a more streamlined process for the data collection process
 
 
