@@ -8,22 +8,26 @@
 
 
 import cv2
+import os
+import time
 
-# Load the pre-trained face detection classifier
+
 
 # Capture video from the webcam
 cap = cv2.VideoCapture(0)
 
-# Loop through each frame
-while True:
-    # Read the frame
+path = 'C:/Users/tkris/Documents/Polygence Project/Face-Data-Collecter/Faces'
+
+    
+
+for i in range(3):
+
+    time.sleep(1)
     ret, frame = cap.read()
+    
+    
+    cv2.imwrite(os.path.join(path, f'face_image_{i}.jpg'), frame)
 
-    cv2.imshow('frame', frame)
-    cv2.imwrite('faces_detected.jpg', frame)
-
-    if cv2.waitKey(1) == ord('q'):
-        break
 
 cap.release()
 cv2.destroyAllWindows()
