@@ -41,4 +41,13 @@ The Data collector for the model that we will train for the facial recognition m
   - Made it more efficient where it takes an image, and then processes it for face features, crops the image down to just the face and saves it
   - Still need to find a way to take more than one photo, as well as create a more streamlined process for the data collection process
 
+ <br><br/>
+ 
+ **4/14**
+ 
+  - Fixed todo, added system to code that would take 3 photos, and then edit those three to get facial photos
+  - main.py: Takes the photo via webcam
+  - crop_image.py: Edits the image to get facial features and saves images to folder
+  - TODO: We need to find a way to streamline the system such as a website or mobile app
+
 
