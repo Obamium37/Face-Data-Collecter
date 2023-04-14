@@ -3,9 +3,7 @@
 
 
 
-
-#TODO: Only takes one picture, we need it to take multiple
-
+#TODO: We need to find a way to streamline this(Website, mobile app etc..)
 
 import cv2
 import os
