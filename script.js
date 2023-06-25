@@ -57,19 +57,13 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         // Stop the camera stream
         mediaStream.getVideoTracks()[0].stop();
 
-        // Create a Blob with the recorded chunks
         const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
 
-      
-        // Generate a download link for the video and automatically trigger the download
-        videoURL = URL.createObjectURL(videoBlob);
-        const a = document.createElement('a');
-        a.href = videoURL;
-        a.download = 'recorded_video.webm';
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        // Upload video to AWS S3 bucket
+        uploadToS3(videoBlob);
+
+
+
 
         // Create a video element to display the recorded video
         const recordedVideo = document.createElement('video');
@@ -78,13 +72,15 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         recordedVideoContainer.appendChild(recordedVideo);
 
         // Calculate the video duration
-        const videoDurationInSeconds = recordedVideo.duration;
-        videoDuration = Math.floor(videoDurationInSeconds);
+        recordedVideo.addEventListener('loadedmetadata', () => {
+          const videoDurationInSeconds = recordedVideo.duration;
+          videoDuration = Math.floor(videoDurationInSeconds);
 
-        // Check if the video duration is less than 30 seconds
-        if (videoDuration < 30) {
-          nextButton.disabled = true;
-        }
+          // Check if the video duration is less than 30 seconds
+          if (videoDuration < 30) {
+            nextButton.disabled = true;
+          }
+        });
       });
 
       // Start recording
@@ -129,4 +125,32 @@ function stopRecording() {
 
   // Stop recording
   mediaRecorder.stop();
+}
+
+// Function to upload video to AWS S3 bucket
+function uploadToS3(videoBlob) {
+  // Replace 'your-bucket-name', 'your-access-key-id', and 'your-secret-access-key' with your actual AWS S3 bucket name, access key ID, and secret access key, respectively
+  const bucketName = 'polygenceproject';
+  const accessKeyId = '';
+  const secretAccessKey = '';
+
+  const s3 = new AWS.S3({
+    accessKeyId: accessKeyId,
+    secretAccessKey: secretAccessKey
+  });
+
+  const params = {
+    Bucket: bucketName,
+    Key: 'recorded_video.webm',
+    Body: videoBlob
+  };
+
+  s3.upload(params, (err, data) => {
+    if (err) {
+      console.error('Failed to upload video to S3:', err);
+    } else {
+      console.log('Video uploaded to S3 successfully:', data.Location);
+      videoURL = data.Location; // Set the videoURL variable with the S3 URL
+    }
+  });
 }
