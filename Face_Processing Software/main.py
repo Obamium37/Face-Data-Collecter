@@ -14,11 +14,11 @@ import time
 # Capture video from the webcam
 cap = cv2.VideoCapture(0)
 
-path = 'C:/Users/tkris/Documents/Polygence Project/Face-Data-Collecter/Faces'
+path = 'C:/Users/tkris/Documents/Polygence Project/Face-Data-Collecter/Face_Processing Software/Faces'
 
-    
+times = 10
 
-for i in range(3):
+for i in range(times):
 
     time.sleep(1)
     ret, frame = cap.read()

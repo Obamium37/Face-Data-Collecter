@@ -4,7 +4,7 @@ import os
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 profile_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
 
-path = 'C:/Users/tkris/Documents/Polygence Project/Face-Data-Collecter/Faces'
+path = 'C:/Users/tkris/Documents/Polygence Project/Face-Data-Collecter/Face_Processing Software\Faces'
 
 num_files = len([f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))])
 print(num_files)
