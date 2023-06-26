@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Camera Recorder</title>
+  <title>Data Collector</title>
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <h1>Camera Recorder</h1>
+  <h1>Data Collecter</h1>
   <div class="container">
     <video id="preview" autoplay muted></video>
     <br>
@@ -22,9 +22,11 @@
 
   <div class="example-video-container">
     <h2>Instructions for facial data collection</h2>
-    <video class="example-video" src="example_vid.mp4" controls></video>
+    <video class="example-video" src="videos/example_vid.mp4" controls></video>
   </div>
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.940.0.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script src="script.js"></script>
   
 </body>
