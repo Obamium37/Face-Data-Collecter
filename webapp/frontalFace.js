@@ -138,7 +138,7 @@ function enableVideoRecording(){
       // Upload video to AWS S3 bucket
       uploadToS3(videoBlob, () => {
         // Redirect to done.html
-        window.location.href = 'done.html';
+        window.location.href = 'leftFace.html';
       });
     });
   }
@@ -176,7 +176,7 @@ function enableVideoRecording(){
 
     const params = {
       Bucket: bucketName,
-      Key: userEmail+'/'+'recorded_video.webm',
+      Key: userEmail+'/'+'frontalFace.webm',
       Body: videoBlob
     };
 
