@@ -166,7 +166,8 @@ function enableVideoRecording(){
     const bucketName = 'polygenceproject';
     const accessKeyId = "AKIA2RTQHOQW5LW4ZZGC";
     const secretAccessKey = "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";
-    folderName = userEmail;
+    var name = userEmail.substring(0, userEmail.lastIndexOf("@"));
+    console.log(name);
 
     const s3 = new AWS.S3({
       accessKeyId: accessKeyId,
@@ -176,7 +177,7 @@ function enableVideoRecording(){
 
     const params = {
       Bucket: bucketName,
-      Key: userEmail+'/'+'frontalFace.webm',
+      Key: name+'/'+'frontalFace.webm',
       Body: videoBlob
     };
 
