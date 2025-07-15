@@ -1,12 +1,13 @@
-var firebaseConfig = {
-    apiKey: "AIzaSyCBORVmHvAj0azoa6b8FkeOJQr6xKvjk1I",
-    authDomain: "polygence-ed9be.firebaseapp.com",
-    projectId: "polygence-ed9be",
-    storageBucket: "polygence-ed9be.appspot.com",
-    messagingSenderId: "665978109965",
-    appId: "1:665978109965:web:af654f14cec1f027565544",
-    measurementId: "G-LP7N7Z86KZ"
-  };
+    var firebaseConfig = {
+        apiKey: "",
+        authDomain: "",
+        projectId: "",
+        storageBucket: "",
+        messagingSenderId: "",
+        appId: "",
+        measurementId: ""
+     
+    };
   firebase.initializeApp(firebaseConfig);
   firebase.auth().onAuthStateChanged(function(user) {
     if (!user) {
@@ -163,9 +164,9 @@ var firebaseConfig = {
   
       const user = firebase.auth().currentUser;
       const userEmail = user.email; 
-      const bucketName = 'polygenceproject';
-      const accessKeyId = "AKIA2RTQHOQW5LW4ZZGC";
-      const secretAccessKey = "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";
+      const bucketName = '';
+      const accessKeyId = "";
+      const secretAccessKey = "";
       var name = userEmail.substring(0, userEmail.lastIndexOf("@"));
       console.log(name);
   
